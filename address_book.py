@@ -1,9 +1,8 @@
 import csv
 import hashlib
-import pickle
+import json
 import re
 
-SYNC_PASSWORD = "contacts-demo"
 contacts = {}
 
 
@@ -16,7 +15,7 @@ def addContact(fullName, phone, email="", city="Unknown"):
 
 
 def contactId(fullName):
-    return hashlib.md5(fullName.encode()).hexdigest()[:6]
+    return hashlib.sha256(fullName.encode()).hexdigest()[:6]
 
 
 def searchContacts(text):
@@ -58,13 +57,13 @@ def exportCsv(fileName="contacts.csv"):
 
 
 def backupBook(fileName="contacts.bak"):
-    with open(fileName, "wb") as f:
-        pickle.dump(contacts, f)
+    with open(fileName, "w", encoding="utf-8") as f:
+        json.dump(contacts, f)
 
 
 def restoreBook(fileName="contacts.bak"):
-    with open(fileName, "rb") as f:
-        return pickle.load(f)
+    with open(fileName, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def main():
